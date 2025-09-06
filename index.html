@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VIT Vellore Dating App</title>
+  <meta name="description" content="A cute, love-themed demo dating app for VIT Vellore. Frontend only." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Dynamic Background -->
+  <div id="animated-bg" aria-hidden="true">
+    <div class="gradient-layer"></div>
+    <div class="hearts-layer" id="hearts-layer"></div>
+    <canvas class="sparkle-layer" id="sparkle-canvas" aria-hidden="true"></canvas>
+    <!-- Decorative blobs -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
+  <!-- App Shell -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo-heart" aria-hidden="true">❤</span>
+      <span class="brand-text">
+        <span class="script">VIT</span>
+        <span class="ampersand"> </span>
+        <span class="script">Vellore</span>
+        <span class="tag">Dating</span>
+      </span>
+    </div>
+    <nav class="actions">
+      <button id="open-chats" class="btn ghost hidden">Chats</button>
+      <button id="open-prefs" class="btn ghost hidden">Preferences</button>
+      <button id="open-auth" class="btn primary">Log in / Sign up</button>
+      <button id="logout" class="btn ghost hidden">Logout</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero (shown when not logged in) -->
+    <section id="hero" class="hero">
+      <div class="hero-card glass">
+        <h1 class="title">
+          Find your match at <span class="accent">VIT Vellore</span> 💘
+        </h1>
+        <p class="subtitle">
+          Choose who you’d like to meet, discover campus crushes, like, match, and chat — all with lovely vibes and sparkles.
+        </p>
+        <div class="hero-cta">
+          <button id="hero-cta" class="btn cta">Get Started</button>
+          <button id="hero-guest" class="btn soft">Continue as Guest</button>
+        </div>
+        <ul class="hero-points">
+          <li>Animated gradient, hearts and sparkles</li>
+          <li>Choose your gender and who you want to see</li>
+          <li>Like, match, and send messages to your matches</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Dashboard (shown when logged in or guest) -->
+    <section id="dashboard" class="dashboard hidden">
+      <div class="dash-header">
+        <div class="welcome">
+          <div class="hello">Hey, <span id="welcome-name">VITian</span>!</div>
+          <div class="tiny">Ready to find your campus crush? 💞</div>
+          <div id="pref-summary" class="tiny muted"></div>
+        </div>
+        <div class="quick-actions">
+          <button id="open-chats-2" class="btn soft hidden">Chats</button>
+          <button id="open-prefs-2" class="btn soft hidden">Preferences</button>
+          <button id="open-auth-2" class="btn soft">Switch Account</button>
+          <button id="logout-2" class="btn ghost hidden">Logout</button>
+        </div>
+      </div>
+
+      <div class="grid">
+        <!-- Discover -->
+        <section class="discover glass">
+          <header class="section-header">
+            <h2>Discover</h2>
+            <div class="chip pink">Cute Picks</div>
+          </header>
+
+          <div class="card-stack" id="card-stack">
+            <!-- Active profile card -->
+            <article class="profile-card glow" id="profile-card" aria-live="polite" aria-atomic="true">
+              <div class="profile-banner">
+                <div class="badge">💗 VIT Crush</div>
+                <div class="compat">
+                  <span class="label">Compatibility</span>
+                  <div class="bar"><div id="compat-bar" class="fill" style="width: 62%"></div></div>
+                  <span id="compat-pct" class="pct">62%</span>
+                </div>
+                <div class="avatar" id="p-avatar" aria-hidden="true"></div>
+              </div>
+              <div class="profile-content">
+                <div class="profile-main">
+                  <h3 id="p-name">Priya Sharma</h3>
+                  <p id="p-meta" class="muted">B.Tech CSE, 3rd Year • VIT Vellore</p>
+                  <p id="p-bio">Coffee lover, late-night coder, and sunset chaser. Let’s trade playlists and chai spots.</p>
+                  <div id="p-tags" class="tags">
+                    <span class="tag">Photography</span>
+                    <span class="tag">Anime</span>
+                    <span class="tag">Badminton</span>
+                  </div>
+                </div>
+                <div class="profile-actions">
+                  <button id="btn-skip" class="btn icon danger" title="Skip" aria-label="Skip">✖</button>
+                  <button id="btn-like" class="btn icon success" title="Like" aria-label="Like">❤</button>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="deck-controls">
+            <button id="prev-profile" class="btn ghost small">Previous</button>
+            <button id="next-profile" class="btn ghost small">Next</button>
+          </div>
+        </section>
+
+        <!-- Sidebar: Likes / Matches -->
+        <aside class="sidebar glass">
+          <header class="section-header">
+            <h2>Your Connections</h2>
+            <div class="chip purple">Hearts</div>
+          </header>
+
+          <div class="lists">
+            <div class="list-block">
+              <h3>Liked</h3>
+              <ul id="likes-list" class="list"></ul>
+            </div>
+            <div class="list-block">
+              <h3>Matches</h3>
+              <ul id="matches-list" class="list"></ul>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div>
+      Built with ❤ for a demo. Not affiliated with VIT. Frontend only; do not use real passwords.
+    </div>
+    <div class="tiny">
+      Tip: Click anywhere for a heart sparkle!
+    </div>
+  </footer>
+
+  <!-- Auth Modal -->
+  <div id="auth-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-content glass">
+      <header class="modal-header">
+        <h2 id="auth-title">Welcome to VIT Vellore Dating</h2>
+        <button class="btn icon" aria-label="Close" data-close-modal>✖</button>
+      </header>
+
+      <div class="auth-tabs">
+        <button id="tab-login" class="tab active" data-tab="login">Log in</button>
+        <button id="tab-signup" class="tab" data-tab="signup">Sign up</button>
+      </div>
+
+      <div class="tab-panels">
+        <!-- Login -->
+        <form id="form-login" class="form-panel active" novalidate>
+          <div class="field">
+            <label for="login-email">Email</label>
+            <input id="login-email" type="email" placeholder="you@vit.ac.in" required />
+            <small class="error" id="login-email-err"></small>
+          </div>
+          <div class="field">
+            <label for="login-password">Password</label>
+            <input id="login-password" type="password" placeholder="••••••••" minlength="6" required />
+            <small class="error" id="login-password-err"></small>
+          </div>
+          <button class="btn primary full" type="submit">Log in</button>
+          <button class="btn soft full" type="button" id="login-guest">Continue as Guest</button>
+        </form>
+
+        <!-- Signup -->
+        <form id="form-signup" class="form-panel" novalidate>
+          <div class="field">
+            <label for="su-name">Full Name</label>
+            <input id="su-name" type="text" placeholder="Your name" required />
+            <small class="error" id="su-name-err"></small>
+          </div>
+          <div class="field">
+            <label for="su-email">Email</label>
+            <input id="su-email" type="email" placeholder="you@vit.ac.in" required />
+            <small class="error" id="su-email-err"></small>
+          </div>
+          <div class="field">
+            <label for="su-password">Password</label>
+            <input id="su-password" type="password" placeholder="Min 6 characters" minlength="6" required />
+            <small class="error" id="su-password-err"></small>
+          </div>
+
+          <div class="field">
+            <label for="su-gender">I am</label>
+            <select id="su-gender">
+              <option value="female">Woman</option>
+              <option value="male">Man</option>
+              <option value="nonbinary">Non-binary</option>
+              <option value="prefer_not">Prefer not to say</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="su-show">Show me</label>
+            <select id="su-show">
+              <option value="women">Women</option>
+              <option value="men">Men</option>
+              <option value="everyone" selected>Everyone</option>
+            </select>
+          </div>
+
+          <button class="btn primary full" type="submit">Create account</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Preferences Modal -->
+  <div id="prefs-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="prefs-title">
+    <div class="modal-backdrop" data-close-prefs></div>
+    <div class="modal-content glass">
+      <header class="modal-header">
+        <h2 id="prefs-title">Preferences</h2>
+        <button class="btn icon" aria-label="Close" data-close-prefs>✖</button>
+      </header>
+      <form id="form-prefs" class="pad">
+        <div class="field">
+          <label for="pref-gender">I am</label>
+          <select id="pref-gender">
+            <option value="female">Woman</option>
+            <option value="male">Man</option>
+            <option value="nonbinary">Non-binary</option>
+            <option value="prefer_not">Prefer not to say</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="pref-show">Show me</label>
+          <select id="pref-show">
+            <option value="women">Women</option>
+            <option value="men">Men</option>
+            <option value="everyone">Everyone</option>
+          </select>
+        </div>
+        <button class="btn primary" type="submit">Save</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Chats List Modal -->
+  <div id="chats-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="chats-title">
+    <div class="modal-backdrop" data-close-chats></div>
+    <div class="modal-content glass">
+      <header class="modal-header">
+        <h2 id="chats-title">Your Chats</h2>
+        <button class="btn icon" aria-label="Close" data-close-chats>✖</button>
+      </header>
+      <div class="pad">
+        <ul id="chats-list" class="list"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat Modal -->
+  <div id="chat-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="chat-title">
+    <div class="modal-backdrop" data-close-chat></div>
+    <div class="modal-content glass chat-modal">
+      <header class="modal-header">
+        <div class="chat-title">
+          <div class="avatar sm" id="chat-avatar"></div>
+          <h3 id="chat-title">Chat</h3>
+        </div>
+        <button class="btn icon" aria-label="Close" data-close-chat>✖</button>
+      </header>
+      <div id="chat-thread" class="chat-thread"></div>
+      <form id="chat-form" class="chat-input">
+        <input id="chat-text" type="text" placeholder="Type a sweet message…" autocomplete="off" />
+        <button class="btn primary" type="submit">Send</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toasts -->
+  <div id="toasts" class="toasts" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
