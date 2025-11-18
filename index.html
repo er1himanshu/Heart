@@ -1,299 +1,594 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>VIT Vellore Dating App</title>
-  <meta name="description" content="A cute, love-themed demo dating app for VIT Vellore. Frontend only." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8" />
+  <title>Sorry, Mitthu</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg1: #ffe4f3;
+      --bg2: #fce1ff;
+      --bg3: #cfe8ff;
+      --bg4: #ffd9c8;
+      --glass-bg: rgba(255, 255, 255, 0.25);
+      --glass-border: rgba(255, 255, 255, 0.7);
+      --accent: #ff6b8b;
+      --accent-soft: rgba(255, 107, 139, 0.22);
+      --text-main: #2b2238;
+      --shadow-soft: 0 20px 40px rgba(24, 16, 39, 0.4);
+      --radius-lg: 26px;
+      --radius-pill: 999px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", Roboto, sans-serif;
+      color: var(--text-main);
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 0% 0%, var(--bg1), transparent 55%),
+        radial-gradient(circle at 100% 0%, var(--bg3), transparent 55%),
+        radial-gradient(circle at 0% 100%, var(--bg4), transparent 55%),
+        radial-gradient(circle at 100% 100%, var(--bg2), transparent 55%);
+      background-size: 220% 220%;
+      animation: pastelDrift 22s ease-in-out infinite alternate;
+      position: relative;
+    }
+
+    @keyframes pastelDrift {
+      0% { background-position: 0% 0%; }
+      50% { background-position: 60% 100%; }
+      100% { background-position: 100% 0%; }
+    }
+
+    /* Floating pastel blobs */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(40px);
+      opacity: 0.7;
+      mix-blend-mode: screen;
+      pointer-events: none;
+      animation: blobFloat 32s ease-in-out infinite alternate;
+    }
+
+    .blob:nth-child(1) {
+      width: 360px;
+      height: 360px;
+      background: radial-gradient(circle, #ffb3c6, transparent 60%);
+      top: -120px;
+      left: -80px;
+      animation-delay: -8s;
+    }
+
+    .blob:nth-child(2) {
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, #c3b9ff, transparent 60%);
+      bottom: -140px;
+      right: -60px;
+      animation-delay: -16s;
+    }
+
+    .blob:nth-child(3) {
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle, #ffd6a5, transparent 60%);
+      top: 40%;
+      left: 60%;
+      animation-delay: -24s;
+    }
+
+    @keyframes blobFloat {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(40px, -30px, 0) scale(1.1); }
+      100% { transform: translate3d(-20px, 20px, 0) scale(1.05); }
+    }
+
+    /* Soft twinkling stars */
+    .star-layer {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .star {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.85);
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+      opacity: 0;
+      animation: twinkle 4s ease-in-out infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; transform: scale(0.4); }
+      40% { opacity: 1; transform: scale(1); }
+      60% { opacity: 0.3; transform: scale(0.7); }
+    }
+
+    /* Main layout */
+    .app-shell {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 540px;
+      padding: 26px 24px 30px;
+      border-radius: var(--radius-lg);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.38));
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(26px) saturate(140%);
+      -webkit-backdrop-filter: blur(26px) saturate(140%);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.6), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(255, 255, 255, 0.5), transparent 55%);
+      opacity: 0.8;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    /* Cute orbiting hearts ring */
+    .orbit {
+      position: relative;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 6px;
+    }
+
+    .orbit-ring {
+      position: absolute;
+      inset: 10px;
+      border-radius: 50%;
+      border: 1px dashed rgba(255, 255, 255, 0.7);
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.35),
+        0 14px 30px rgba(25, 20, 48, 0.25);
+      background: radial-gradient(circle at 30% 0%, rgba(255, 255, 255, 0.85), transparent 55%);
+    }
+
+    .center-heart {
+      position: relative;
+      z-index: 2;
+      width: 80px;
+      height: 80px;
+      transform: rotate(45deg);
+      background: radial-gradient(circle at 30% 30%, #ff9bb4, #ff6b8b);
+      box-shadow:
+        0 18px 40px rgba(255, 107, 139, 0.65),
+        0 0 0 10px rgba(255, 255, 255, 0.4);
+    }
+
+    .center-heart::before,
+    .center-heart::after {
+      content: "";
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #ff9bb4, #ff6b8b);
+    }
+
+    .center-heart::before {
+      top: -40px;
+      left: 0;
+    }
+
+    .center-heart::after {
+      left: -40px;
+      top: 0;
+    }
+
+    .center-heart-inner {
+      position: absolute;
+      inset: 16px;
+      border-radius: 50%;
+      transform: rotate(-45deg);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.9), transparent 60%),
+        radial-gradient(circle at 100% 100%, rgba(255, 255, 255, 0.65), transparent 55%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #ff4775;
+    }
+
+    .orbit-heart {
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      transform: rotate(45deg);
+      background: var(--accent-soft);
+      animation: orbit 14s linear infinite;
+    }
+
+    .orbit-heart::before,
+    .orbit-heart::after {
+      content: "";
+      position: absolute;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+    }
+
+    .orbit-heart::before {
+      top: -11px;
+      left: 0;
+    }
+
+    .orbit-heart::after {
+      left: -11px;
+      top: 0;
+    }
+
+    .orbit-heart:nth-child(1) {
+      top: 10px;
+      left: 50%;
+      margin-left: -11px;
+      animation-delay: 0s;
+    }
+
+    .orbit-heart:nth-child(2) {
+      bottom: 10px;
+      left: 50%;
+      margin-left: -11px;
+      animation-delay: -3.5s;
+    }
+
+    .orbit-heart:nth-child(3) {
+      left: 10px;
+      top: 50%;
+      margin-top: -11px;
+      animation-delay: -7s;
+    }
+
+    .orbit-heart:nth-child(4) {
+      right: 10px;
+      top: 50%;
+      margin-top: -11px;
+      animation-delay: -10.5s;
+    }
+
+    @keyframes orbit {
+      0%   { transform: rotate(45deg) translate(0,0); opacity: 0.7; }
+      50%  { transform: rotate(225deg) translate(4px, -4px); opacity: 1; }
+      100% { transform: rotate(405deg) translate(0,0); opacity: 0.7; }
+    }
+
+    /* Text */
+    .title {
+      position: relative;
+      z-index: 2;
+      font-size: clamp(2.1rem, 7vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-align: center;
+      margin-top: 8px;
+      margin-bottom: 6px;
+      color: #ff3d71;
+      text-shadow:
+        0 10px 26px rgba(42, 18, 45, 0.6),
+        0 0 24px rgba(255, 255, 255, 0.85);
+    }
+
+    .subtitle {
+      position: relative;
+      z-index: 2;
+      font-size: 0.86rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      text-align: center;
+      color: rgba(55, 35, 72, 0.7);
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      box-shadow: 0 10px 24px rgba(40, 21, 63, 0.25);
+    }
+
+    /* Floating hearts background on save click */
+    .hearts-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 3;
+    }
+
+    .heart {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: var(--accent);
+      transform: rotate(45deg);
+      opacity: 0;
+      animation: floatUp 1.8s ease-out forwards;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background: var(--accent);
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -8px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -8px;
+      top: 0;
+    }
+
+    .heart.soft {
+      background: rgba(255, 107, 139, 0.7);
+    }
+    .heart.soft::before,
+    .heart.soft::after {
+      background: rgba(255, 107, 139, 0.7);
+    }
+
+    .heart.pastel {
+      background: #ffb3c6;
+    }
+    .heart.pastel::before,
+    .heart.pastel::after {
+      background: #ffb3c6;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translate3d(0, 0, 0) scale(0.6) rotate(45deg);
+        opacity: 0;
+      }
+      15% {
+        opacity: 1;
+      }
+      60% {
+        opacity: 0.95;
+      }
+      100% {
+        transform: translate3d(var(--dx, 0px), -160px, 0) scale(1.05) rotate(45deg);
+        opacity: 0;
+      }
+    }
+
+    /* Invisible button just for hearts trigger (no text shown) */
+    .save-trigger {
+      position: absolute;
+      inset: 0;
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      outline: none;
+      z-index: 4;
+    }
+
+    .save-trigger:focus-visible {
+      outline: 2px dashed rgba(255, 255, 255, 0.9);
+      outline-offset: 6px;
+    }
+
+    /* Mobile tweaks */
+    @media (max-width: 600px) {
+      .card {
+        padding: 22px 18px 24px;
+        border-radius: 22px;
+      }
+      .orbit {
+        width: 160px;
+        height: 160px;
+      }
+      .title {
+        letter-spacing: 0.14em;
+      }
+      .subtitle {
+        font-size: 0.8rem;
+        letter-spacing: 0.18em;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .card {
+        border-radius: 20px;
+      }
+      .orbit {
+        width: 140px;
+        height: 140px;
+      }
+      .center-heart {
+        width: 72px;
+        height: 72px;
+      }
+      .center-heart::before,
+      .center-heart::after {
+        width: 72px;
+        height: 72px;
+      }
+      .center-heart::before {
+        top: -36px;
+      }
+      .center-heart::after {
+        left: -36px;
+      }
+      .center-heart-inner {
+        inset: 14px;
+        font-size: 0.82rem;
+      }
+    }
+  </style>
 </head>
 <body>
-  <!-- Dynamic Background -->
-  <div id="animated-bg" aria-hidden="true">
-    <div class="gradient-layer"></div>
-    <div class="hearts-layer" id="hearts-layer"></div>
-    <canvas class="sparkle-layer" id="sparkle-canvas" aria-hidden="true"></canvas>
-    <!-- Decorative blobs -->
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-  </div>
+  <!-- Pastel glow blobs -->
+  <div class="blob"></div>
+  <div class="blob"></div>
+  <div class="blob"></div>
 
-  <!-- App Shell -->
-  <header class="topbar">
-    <div class="brand">
-      <span class="logo-heart" aria-hidden="true">❤</span>
-      <span class="brand-text">
-        <span class="script">VIT</span>
-        <span class="ampersand"> </span>
-        <span class="script">Vellore</span>
-        <span class="tag">Dating</span>
-      </span>
-    </div>
-    <nav class="actions">
-      <button id="open-chats" class="btn ghost hidden">Chats</button>
-      <button id="open-prefs" class="btn ghost hidden">Preferences</button>
-      <button id="open-auth" class="btn primary">Log in / Sign up</button>
-      <button id="logout" class="btn ghost hidden">Logout</button>
-    </nav>
-  </header>
+  <!-- Tiny twinkling stars -->
+  <div class="star-layer" aria-hidden="true"></div>
 
-  <main>
-    <!-- Hero (shown when not logged in) -->
-    <section id="hero" class="hero">
-      <div class="hero-card glass">
-        <h1 class="title">
-          Find your match at <span class="accent">VIT Vellore</span> 💘
-        </h1>
-        <p class="subtitle">
-          Choose who you’d like to meet, discover campus crushes, like, match, and chat — all with lovely vibes and sparkles.
-        </p>
-        <div class="hero-cta">
-          <button id="hero-cta" class="btn cta">Get Started</button>
-          <button id="hero-guest" class="btn soft">Continue as Guest</button>
-        </div>
-        <ul class="hero-points">
-          <li>Animated gradient, hearts and sparkles</li>
-          <li>Choose your gender and who you want to see</li>
-          <li>Like, match, and send messages to your matches</li>
-        </ul>
-      </div>
-    </section>
+  <!-- Hearts burst layer -->
+  <div class="hearts-layer" aria-hidden="true"></div>
 
-    <!-- Dashboard (shown when logged in or guest) -->
-    <section id="dashboard" class="dashboard hidden">
-      <div class="dash-header">
-        <div class="welcome">
-          <div class="hello">Hey, <span id="welcome-name">VITian</span>!</div>
-          <div class="tiny">Ready to find your campus crush? 💞</div>
-          <div id="pref-summary" class="tiny muted"></div>
+  <main class="app-shell">
+    <section class="card" aria-label="Sorry, Mitthu">
+      <div class="orbit">
+        <div class="orbit-ring"></div>
+        <div class="center-heart">
+          <div class="center-heart-inner">
+            sorry<br>mitthu
+          </div>
         </div>
-        <div class="quick-actions">
-          <button id="open-chats-2" class="btn soft hidden">Chats</button>
-          <button id="open-prefs-2" class="btn soft hidden">Preferences</button>
-          <button id="open-auth-2" class="btn soft">Switch Account</button>
-          <button id="logout-2" class="btn ghost hidden">Logout</button>
-        </div>
+        <div class="orbit-heart"></div>
+        <div class="orbit-heart"></div>
+        <div class="orbit-heart"></div>
+        <div class="orbit-heart"></div>
       </div>
 
-      <div class="grid">
-        <!-- Discover -->
-        <section class="discover glass">
-          <header class="section-header">
-            <h2>Discover</h2>
-            <div class="chip pink">Cute Picks</div>
-          </header>
-
-          <div class="card-stack" id="card-stack">
-            <!-- Active profile card -->
-            <article class="profile-card glow" id="profile-card" aria-live="polite" aria-atomic="true">
-              <div class="profile-banner">
-                <div class="badge">💗 VIT Crush</div>
-                <div class="compat">
-                  <span class="label">Compatibility</span>
-                  <div class="bar"><div id="compat-bar" class="fill" style="width: 62%"></div></div>
-                  <span id="compat-pct" class="pct">62%</span>
-                </div>
-                <div class="avatar" id="p-avatar" aria-hidden="true"></div>
-              </div>
-              <div class="profile-content">
-                <div class="profile-main">
-                  <h3 id="p-name">Priya Sharma</h3>
-                  <p id="p-meta" class="muted">B.Tech CSE, 3rd Year • VIT Vellore</p>
-                  <p id="p-bio">Coffee lover, late-night coder, and sunset chaser. Let’s trade playlists and chai spots.</p>
-                  <div id="p-tags" class="tags">
-                    <span class="tag">Photography</span>
-                    <span class="tag">Anime</span>
-                    <span class="tag">Badminton</span>
-                  </div>
-                </div>
-                <div class="profile-actions">
-                  <button id="btn-skip" class="btn icon danger" title="Skip" aria-label="Skip">✖</button>
-                  <button id="btn-like" class="btn icon success" title="Like" aria-label="Like">❤</button>
-                </div>
-              </div>
-            </article>
-          </div>
-
-          <div class="deck-controls">
-            <button id="prev-profile" class="btn ghost small">Previous</button>
-            <button id="next-profile" class="btn ghost small">Next</button>
-          </div>
-        </section>
-
-        <!-- Sidebar: Likes / Matches -->
-        <aside class="sidebar glass">
-          <header class="section-header">
-            <h2>Your Connections</h2>
-            <div class="chip purple">Hearts</div>
-          </header>
-
-          <div class="lists">
-            <div class="list-block">
-              <h3>Liked</h3>
-              <ul id="likes-list" class="list"></ul>
-            </div>
-            <div class="list-block">
-              <h3>Matches</h3>
-              <ul id="matches-list" class="list"></ul>
-            </div>
-          </div>
-        </aside>
+      <div class="title">
+        SORRY&nbsp;MITTHU
       </div>
+
+      <div class="subtitle">
+        FROM&nbsp;MY&nbsp;HEART&nbsp;TO&nbsp;YOURS
+      </div>
+
+      <!-- invisible button just to trigger hearts when tapped/clicked -->
+      <button class="save-trigger" aria-label="Send soft floating hearts to Mitthu"></button>
     </section>
   </main>
 
-  <footer class="footer">
-    <div>
-      Built with ❤ for a demo. Not affiliated with VIT. Frontend only; do not use real passwords.
-    </div>
-    <div class="tiny">
-      Tip: Click anywhere for a heart sparkle!
-    </div>
-  </footer>
+  <script>
+    (function () {
+      const starLayer = document.querySelector(".star-layer");
+      const heartsLayer = document.querySelector(".hearts-layer");
+      const trigger = document.querySelector(".save-trigger");
 
-  <!-- Auth Modal -->
-  <div id="auth-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="auth-title">
-    <div class="modal-backdrop" data-close-modal></div>
-    <div class="modal-content glass">
-      <header class="modal-header">
-        <h2 id="auth-title">Welcome to VIT Vellore Dating</h2>
-        <button class="btn icon" aria-label="Close" data-close-modal>✖</button>
-      </header>
+      // Create soft twinkling stars
+      function createStars() {
+        const starCount = 55;
+        const frag = document.createDocumentFragment();
+        for (let i = 0; i < starCount; i++) {
+          const s = document.createElement("div");
+          s.className = "star";
+          const x = Math.random() * 100;
+          const y = Math.random() * 100;
+          s.style.left = x + "vw";
+          s.style.top = y + "vh";
+          const delay = Math.random() * 6;
+          const size = 2 + Math.random() * 2;
+          s.style.width = size + "px";
+          s.style.height = size + "px";
+          s.style.animationDelay = -delay + "s";
+          starLayer.appendChild(s);
+        }
+      }
 
-      <div class="auth-tabs">
-        <button id="tab-login" class="tab active" data-tab="login">Log in</button>
-        <button id="tab-signup" class="tab" data-tab="signup">Sign up</button>
-      </div>
+      // Hearts burst
+      function spawnHeartsBurst(x, y) {
+        const burstCount = 22 + Math.floor(Math.random() * 10);
+        for (let i = 0; i < burstCount; i++) {
+          const heart = document.createElement("div");
+          heart.classList.add("heart");
+          const variant = Math.random();
+          if (variant < 0.33) heart.classList.add("soft");
+          else if (variant < 0.66) heart.classList.add("pastel");
 
-      <div class="tab-panels">
-        <!-- Login -->
-        <form id="form-login" class="form-panel active" novalidate>
-          <div class="field">
-            <label for="login-email">Email</label>
-            <input id="login-email" type="email" placeholder="you@vit.ac.in" required />
-            <small class="error" id="login-email-err"></small>
-          </div>
-          <div class="field">
-            <label for="login-password">Password</label>
-            <input id="login-password" type="password" placeholder="••••••••" minlength="6" required />
-            <small class="error" id="login-password-err"></small>
-          </div>
-          <button class="btn primary full" type="submit">Log in</button>
-          <button class="btn soft full" type="button" id="login-guest">Continue as Guest</button>
-        </form>
+          const startX = x + (Math.random() - 0.5) * 60;
+          const startY = y + (Math.random() - 0.2) * 40;
 
-        <!-- Signup -->
-        <form id="form-signup" class="form-panel" novalidate>
-          <div class="field">
-            <label for="su-name">Full Name</label>
-            <input id="su-name" type="text" placeholder="Your name" required />
-            <small class="error" id="su-name-err"></small>
-          </div>
-          <div class="field">
-            <label for="su-email">Email</label>
-            <input id="su-email" type="email" placeholder="you@vit.ac.in" required />
-            <small class="error" id="su-email-err"></small>
-          </div>
-          <div class="field">
-            <label for="su-password">Password</label>
-            <input id="su-password" type="password" placeholder="Min 6 characters" minlength="6" required />
-            <small class="error" id="su-password-err"></small>
-          </div>
+          heart.style.left = startX + "px";
+          heart.style.top = startY + "px";
 
-          <div class="field">
-            <label for="su-gender">I am</label>
-            <select id="su-gender">
-              <option value="female">Woman</option>
-              <option value="male">Man</option>
-              <option value="nonbinary">Non-binary</option>
-              <option value="prefer_not">Prefer not to say</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="su-show">Show me</label>
-            <select id="su-show">
-              <option value="women">Women</option>
-              <option value="men">Men</option>
-              <option value="everyone" selected>Everyone</option>
-            </select>
-          </div>
+          const dx = (Math.random() - 0.5) * 180;
+          heart.style.setProperty("--dx", dx + "px");
 
-          <button class="btn primary full" type="submit">Create account</button>
-        </form>
-      </div>
-    </div>
-  </div>
+          const scale = 0.6 + Math.random() * 0.8;
+          const duration = 1.4 + Math.random() * 0.7;
+          const delay = Math.random() * 0.12;
 
-  <!-- Preferences Modal -->
-  <div id="prefs-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="prefs-title">
-    <div class="modal-backdrop" data-close-prefs></div>
-    <div class="modal-content glass">
-      <header class="modal-header">
-        <h2 id="prefs-title">Preferences</h2>
-        <button class="btn icon" aria-label="Close" data-close-prefs>✖</button>
-      </header>
-      <form id="form-prefs" class="pad">
-        <div class="field">
-          <label for="pref-gender">I am</label>
-          <select id="pref-gender">
-            <option value="female">Woman</option>
-            <option value="male">Man</option>
-            <option value="nonbinary">Non-binary</option>
-            <option value="prefer_not">Prefer not to say</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="pref-show">Show me</label>
-          <select id="pref-show">
-            <option value="women">Women</option>
-            <option value="men">Men</option>
-            <option value="everyone">Everyone</option>
-          </select>
-        </div>
-        <button class="btn primary" type="submit">Save</button>
-      </form>
-    </div>
-  </div>
+          heart.style.transform =
+            "translate3d(0, 0, 0) scale(" + scale + ") rotate(45deg)";
+          heart.style.animationDuration = duration + "s";
+          heart.style.animationDelay = delay + "s";
 
-  <!-- Chats List Modal -->
-  <div id="chats-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="chats-title">
-    <div class="modal-backdrop" data-close-chats></div>
-    <div class="modal-content glass">
-      <header class="modal-header">
-        <h2 id="chats-title">Your Chats</h2>
-        <button class="btn icon" aria-label="Close" data-close-chats>✖</button>
-      </header>
-      <div class="pad">
-        <ul id="chats-list" class="list"></ul>
-      </div>
-    </div>
-  </div>
+          heartsLayer.appendChild(heart);
+          heart.addEventListener(
+            "animationend",
+            () => heart.remove(),
+            { once: true }
+          );
+        }
+      }
 
-  <!-- Chat Modal -->
-  <div id="chat-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="chat-title">
-    <div class="modal-backdrop" data-close-chat></div>
-    <div class="modal-content glass chat-modal">
-      <header class="modal-header">
-        <div class="chat-title">
-          <div class="avatar sm" id="chat-avatar"></div>
-          <h3 id="chat-title">Chat</h3>
-        </div>
-        <button class="btn icon" aria-label="Close" data-close-chat>✖</button>
-      </header>
-      <div id="chat-thread" class="chat-thread"></div>
-      <form id="chat-form" class="chat-input">
-        <input id="chat-text" type="text" placeholder="Type a sweet message…" autocomplete="off" />
-        <button class="btn primary" type="submit">Send</button>
-      </form>
-    </div>
-  </div>
+      trigger.addEventListener("click", (e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        spawnHeartsBurst(centerX, centerY);
+      });
 
-  <!-- Toasts -->
-  <div id="toasts" class="toasts" aria-live="polite" aria-atomic="true"></div>
-
-  <script src="script.js"></script>
+      // Also trigger on first load for a gentle welcome
+      window.addEventListener("load", () => {
+        createStars();
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+        setTimeout(() => spawnHeartsBurst(centerX, centerY + 10), 400);
+      });
+    })();
+  </script>
 </body>
 </html>
