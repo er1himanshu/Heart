@@ -1,776 +1,564 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Sorry, Mitthu</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <style>
-    :root {
-      --bg1: #ffe4f3;
-      --bg2: #fce1ff;
-      --bg3: #cfe8ff;
-      --bg4: #ffd9c8;
-      --accent: #ff6b9b;
-      --accent2: #ff9a9e;
-      --accent3: #fad0c4;
-      --text-main: #211528;
-      --shadow-soft: 0 26px 70px rgba(23, 10, 35, 0.65);
-      --glass-border: rgba(255, 255, 255, 0.9);
-      --radius-lg: 30px;
-      --radius-pill: 999px;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mehfil: The Poetry of India</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        heading: ['"Rozha One"', 'serif'],
+                        body: ['"Karma"', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Karma:wght@300;400;500;600;700&family=Rozha+One&display=swap" rel="stylesheet">
 
-    html,
-    body {
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-        "Segoe UI", Roboto, sans-serif;
-      color: var(--text-main);
-    }
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-    body {
-      background:
-        radial-gradient(circle at 0% 0%, var(--bg1), transparent 55%),
-        radial-gradient(circle at 100% 0%, var(--bg3), transparent 55%),
-        radial-gradient(circle at 0% 100%, var(--bg4), transparent 55%),
-        radial-gradient(circle at 100% 100%, var(--bg2), transparent 55%);
-      background-size: 240% 240%;
-      animation: pastelDrift 26s ease-in-out infinite alternate;
-      position: relative;
-    }
-
-    @keyframes pastelDrift {
-      0% { background-position: 0% 0%; }
-      40% { background-position: 50% 100%; }
-      100% { background-position: 100% 0%; }
-    }
-
-    /* Aurora ribbons */
-    .aurora {
-      position: fixed;
-      inset: -20%;
-      background:
-        conic-gradient(from 180deg at 10% 0%, rgba(255, 255, 255, 0.1), transparent 40%, rgba(255, 255, 255, 0.25), transparent 60%, rgba(255, 255, 255, 0.05)),
-        radial-gradient(circle at 0% 0%, rgba(255, 182, 193, 0.45), transparent 60%),
-        radial-gradient(circle at 100% 100%, rgba(173, 216, 230, 0.45), transparent 60%);
-      mix-blend-mode: screen;
-      opacity: 0.8;
-      filter: blur(26px);
-      pointer-events: none;
-      animation: auroraDrift 30s ease-in-out infinite alternate;
-      z-index: 0;
-    }
-
-    @keyframes auroraDrift {
-      0% { transform: translate3d(-5%, 0, 0) scale(1); }
-      50% { transform: translate3d(5%, -3%, 0) scale(1.05); }
-      100% { transform: translate3d(-3%, 4%, 0) scale(1.03); }
-    }
-
-    /* Floating pastel clouds */
-    .cloud {
-      position: fixed;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.3));
-      filter: blur(10px);
-      opacity: 0.8;
-      mix-blend-mode: screen;
-      pointer-events: none;
-      animation: cloudFloat 40s linear infinite;
-    }
-
-    .cloud:nth-child(1) {
-      width: 260px;
-      height: 120px;
-      top: 9%;
-      left: -15%;
-      animation-duration: 48s;
-    }
-
-    .cloud:nth-child(2) {
-      width: 200px;
-      height: 100px;
-      top: 17%;
-      right: -18%;
-      animation-duration: 42s;
-      animation-delay: -10s;
-    }
-
-    .cloud:nth-child(3) {
-      width: 260px;
-      height: 120px;
-      bottom: 12%;
-      left: -18%;
-      animation-duration: 46s;
-      animation-delay: -18s;
-    }
-
-    .cloud:nth-child(4) {
-      width: 220px;
-      height: 110px;
-      bottom: 18%;
-      right: -15%;
-      animation-duration: 52s;
-      animation-delay: -26s;
-    }
-
-    @keyframes cloudFloat {
-      0% { transform: translateX(0); opacity: 0.85; }
-      50% { opacity: 0.6; }
-      100% { transform: translateX(120%); opacity: 0.85; }
-    }
-
-    /* Tiny twinkling stars */
-    .star-layer {
-      position: fixed;
-      inset: 0;
-      overflow: hidden;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .star {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
-      opacity: 0;
-      animation: twinkle 4.6s ease-in-out infinite;
-    }
-
-    @keyframes twinkle {
-      0%, 100% { opacity: 0; transform: scale(0.4); }
-      30% { opacity: 1; transform: scale(1); }
-      60% { opacity: 0.3; transform: scale(0.7); }
-    }
-
-    /* Main layout */
-    .app-shell {
-      position: relative;
-      z-index: 1;
-      height: 100%;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 18px;
-    }
-
-    .card {
-      width: 100%;
-      max-width: 620px;
-      padding: 28px 26px 30px;
-      border-radius: var(--radius-lg);
-      background:
-        radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.7)),
-        linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.6));
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--shadow-soft);
-      backdrop-filter: blur(32px) saturate(150%);
-      -webkit-backdrop-filter: blur(32px) saturate(150%);
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: -140px;
-      background:
-        radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.95), transparent 55%),
-        radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.8), transparent 60%),
-        conic-gradient(from 210deg at 50% 120%, rgba(255, 255, 255, 0.7), transparent 40%, rgba(255, 255, 255, 0.4), transparent 80%, rgba(255, 255, 255, 0.8));
-      opacity: 0.9;
-      mix-blend-mode: screen;
-      pointer-events: none;
-    }
-
-    .card::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.7), transparent 60%),
-        radial-gradient(circle at 0% 100%, rgba(255, 255, 255, 0.4), transparent 60%);
-      opacity: 0.6;
-      mix-blend-mode: soft-light;
-      pointer-events: none;
-    }
-
-    /* Orbiting halo with swinging heart */
-    .orbit {
-      position: relative;
-      width: 210px;
-      height: 210px;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .halo {
-      position: absolute;
-      inset: 12px;
-      border-radius: 50%;
-      border: 1px solid rgba(255, 255, 255, 0.9);
-      background:
-        conic-gradient(from 180deg, rgba(255, 154, 158, 0.6), rgba(250, 208, 196, 0.6), rgba(255, 154, 158, 0.6));
-      box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.85),
-        0 18px 40px rgba(54, 30, 80, 0.4);
-      opacity: 0.95;
-    }
-
-    .halo-inner {
-      position: absolute;
-      inset: 22px;
-      border-radius: 50%;
-      background:
-        radial-gradient(circle at 30% 0%, rgba(255, 255, 255, 1), transparent 60%),
-        radial-gradient(circle at 100% 120%, rgba(255, 255, 255, 0.7), transparent 60%);
-      box-shadow: inset 0 0 18px rgba(255, 255, 255, 0.8);
-    }
-
-    .swing-heart-wrap {
-      position: absolute;
-      top: 6px;
-      left: 50%;
-      width: 0;
-      height: 0;
-      transform-origin: top;
-      animation: swing 3.2s ease-in-out infinite;
-      z-index: 2;
-    }
-
-    .swing-string {
-      width: 1px;
-      height: 70px;
-      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.3));
-      transform: translateX(-50%);
-    }
-
-    .swing-heart {
-      width: 72px;
-      height: 72px;
-      transform: translate(-50%, 4px) rotate(45deg);
-      background: radial-gradient(circle at 20% 20%, #ffe5ef, #ff6b9b);
-      box-shadow:
-        0 16px 32px rgba(255, 107, 155, 0.7),
-        0 0 0 8px rgba(255, 255, 255, 0.7);
-      border-radius: 4px;
-      position: relative;
-    }
-
-    .swing-heart::before,
-    .swing-heart::after {
-      content: "";
-      position: absolute;
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 20% 20%, #ffe5ef, #ff6b9b);
-    }
-
-    .swing-heart::before {
-      top: -36px;
-      left: 0;
-    }
-
-    .swing-heart::after {
-      left: -36px;
-      top: 0;
-    }
-
-    .swing-label {
-      position: absolute;
-      inset: 16px;
-      border-radius: 50%;
-      transform: rotate(-45deg);
-      background:
-        radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.9), transparent 60%),
-        radial-gradient(circle at 100% 100%, rgba(255, 255, 255, 0.8), transparent 60%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: #ff3b7d;
-    }
-
-    @keyframes swing {
-      0% { transform: rotate(0deg); }
-      25% { transform: rotate(6deg); }
-      50% { transform: rotate(0deg); }
-      75% { transform: rotate(-6deg); }
-      100% { transform: rotate(0deg); }
-    }
-
-    /* Orbiting mini hearts */
-    .orbit-heart {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      transform: rotate(45deg);
-      background: rgba(255, 107, 155, 0.32);
-      animation: orbit 14s linear infinite;
-      box-shadow: 0 10px 18px rgba(255, 107, 155, 0.4);
-    }
-
-    .orbit-heart::before,
-    .orbit-heart::after {
-      content: "";
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: inherit;
-    }
-
-    .orbit-heart::before {
-      top: -10px;
-      left: 0;
-    }
-
-    .orbit-heart::after {
-      left: -10px;
-      top: 0;
-    }
-
-    .orbit-heart:nth-child(1) {
-      top: 8px;
-      left: 50%;
-      margin-left: -10px;
-      animation-delay: 0s;
-    }
-
-    .orbit-heart:nth-child(2) {
-      bottom: 8px;
-      left: 50%;
-      margin-left: -10px;
-      animation-delay: -3.5s;
-    }
-
-    .orbit-heart:nth-child(3) {
-      left: 8px;
-      top: 50%;
-      margin-top: -10px;
-      animation-delay: -7s;
-    }
-
-    .orbit-heart:nth-child(4) {
-      right: 8px;
-      top: 50%;
-      margin-top: -10px;
-      animation-delay: -10.5s;
-    }
-
-    @keyframes orbit {
-      0%   { transform: rotate(45deg) translate(0,0); opacity: 0.7; }
-      50%  { transform: rotate(225deg) translate(4px, -4px); opacity: 1; }
-      100% { transform: rotate(405deg) translate(0,0); opacity: 0.7; }
-    }
-
-    /* Text styles */
-    .title {
-      position: relative;
-      z-index: 2;
-      font-size: clamp(2.4rem, 8vw, 3rem);
-      font-weight: 900;
-      letter-spacing: 0.24em;
-      text-transform: uppercase;
-      text-align: center;
-      margin-top: 8px;
-      margin-bottom: 4px;
-      color: #ff336b;
-      text-shadow:
-        0 16px 40px rgba(33, 10, 46, 0.75),
-        0 0 32px rgba(255, 255, 255, 0.9);
-    }
-
-    .title span.shadow {
-      position: relative;
-      display: inline-block;
-    }
-
-    .title span.shadow::after {
-      content: "SORRY MITTHU";
-      position: absolute;
-      inset: 0;
-      transform: translate3d(0, 2px, 0);
-      filter: blur(4px);
-      opacity: 0.3;
-      z-index: -1;
-    }
-
-    .ribbon {
-      position: relative;
-      z-index: 2;
-      margin-top: 6px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 5px 16px;
-      border-radius: var(--radius-pill);
-      background: linear-gradient(120deg, rgba(255, 154, 158, 0.4), rgba(250, 208, 196, 0.4));
-      border: 1px solid rgba(255, 255, 255, 0.9);
-      box-shadow:
-        0 14px 32px rgba(48, 26, 73, 0.35),
-        0 0 0 1px rgba(255, 255, 255, 0.6);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      font-size: 0.82rem;
-      letter-spacing: 0.26em;
-      text-transform: uppercase;
-      color: rgba(48, 26, 73, 0.8);
-    }
-
-    .floating-note {
-      position: relative;
-      z-index: 2;
-      margin-top: 16px;
-      padding: 10px 18px;
-      border-radius: 24px;
-      background: rgba(255, 255, 255, 0.96);
-      border: 1px solid rgba(255, 255, 255, 1);
-      box-shadow:
-        0 18px 32px rgba(40, 23, 66, 0.35),
-        0 0 0 1px rgba(255, 255, 255, 0.6);
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 0.86rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(41, 19, 70, 0.7);
-      transform-origin: center;
-      animation: noteFloat 4.5s ease-in-out infinite;
-    }
-
-    .note-heart {
-      width: 18px;
-      height: 18px;
-      transform: rotate(45deg);
-      background: linear-gradient(135deg, #ff9a9e, #fecfef);
-      box-shadow:
-        0 8px 16px rgba(255, 153, 188, 0.6),
-        0 0 0 3px rgba(255, 255, 255, 0.8);
-      border-radius: 4px;
-      position: relative;
-    }
-
-    .note-heart::before,
-    .note-heart::after {
-      content: "";
-      position: absolute;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: inherit;
-    }
-
-    .note-heart::before {
-      top: -9px;
-      left: 0;
-    }
-
-    .note-heart::after {
-      left: -9px;
-      top: 0;
-    }
-
-    @keyframes noteFloat {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-6px); }
-    }
-
-    /* Hearts burst layer */
-    .hearts-layer {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 3;
-    }
-
-    .heart {
-      position: absolute;
-      width: 18px;
-      height: 18px;
-      background: var(--accent);
-      transform: rotate(45deg);
-      opacity: 0;
-      animation: floatUp 1.9s ease-out forwards;
-    }
-
-    .heart::before,
-    .heart::after {
-      content: "";
-      position: absolute;
-      width: 18px;
-      height: 18px;
-      background: var(--accent);
-      border-radius: 50%;
-    }
-
-    .heart::before {
-      top: -9px;
-      left: 0;
-    }
-
-    .heart::after {
-      left: -9px;
-      top: 0;
-    }
-
-    .heart.soft {
-      background: rgba(255, 107, 155, 0.7);
-    }
-    .heart.soft::before,
-    .heart.soft::after {
-      background: rgba(255, 107, 155, 0.7);
-    }
-
-    .heart.pastel {
-      background: #ffb3c6;
-    }
-    .heart.pastel::before,
-    .heart.pastel::after {
-      background: #ffb3c6;
-    }
-
-    .heart.glow {
-      filter: drop-shadow(0 0 10px rgba(255, 198, 222, 0.9));
-    }
-
-    @keyframes floatUp {
-      0% {
-        transform: translate3d(0, 0, 0) scale(0.6) rotate(45deg);
-        opacity: 0;
-      }
-      15% {
-        opacity: 1;
-      }
-      60% {
-        opacity: 0.95;
-      }
-      100% {
-        transform: translate3d(var(--dx, 0px), -180px, 0) scale(1.08) rotate(45deg);
-        opacity: 0;
-      }
-    }
-
-    /* Invisible trigger */
-    .save-trigger {
-      position: absolute;
-      inset: 0;
-      cursor: pointer;
-      background: transparent;
-      border: none;
-      outline: none;
-      z-index: 4;
-    }
-
-    .save-trigger:focus-visible {
-      outline: 2px dashed rgba(255, 255, 255, 0.9);
-      outline-offset: 10px;
-    }
-
-    /* Mobile tweaks */
-    @media (max-width: 720px) {
-      .card {
-        max-width: 92vw;
-        padding: 24px 18px 26px;
-        border-radius: 24px;
-      }
-      .orbit {
-        width: 190px;
-        height: 190px;
-      }
-      .swing-string {
-        height: 60px;
-      }
-      .swing-heart {
-        width: 66px;
-        height: 66px;
-      }
-      .swing-heart::before,
-      .swing-heart::after {
-        width: 66px;
-        height: 66px;
-      }
-      .swing-heart::before { top: -33px; }
-      .swing-heart::after { left: -33px; }
-      .swing-label {
-        inset: 14px;
-        font-size: 0.78rem;
-      }
-      .title {
-        letter-spacing: 0.18em;
-      }
-      .ribbon {
-        font-size: 0.78rem;
-        letter-spacing: 0.18em;
-      }
-      .floating-note {
-        font-size: 0.8rem;
-        letter-spacing: 0.14em;
-      }
-    }
-
-    @media (max-width: 420px) {
-      .card {
-        border-radius: 22px;
-      }
-      .orbit {
-        width: 170px;
-        height: 170px;
-      }
-      .halo { inset: 12px; }
-      .halo-inner { inset: 22px; }
-    }
-  </style>
+    <style>
+        /* Custom Scrollbar hiding */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Smooth transitions */
+        body {
+            transition: background-color 0.7s, color 0.7s;
+        }
+    </style>
 </head>
-<body>
-  <!-- Aurora & clouds -->
-  <div class="aurora"></div>
-  <div class="cloud"></div>
-  <div class="cloud"></div>
-  <div class="cloud"></div>
-  <div class="cloud"></div>
+<body class="bg-[#fffdf5] text-stone-800 font-body transition-colors duration-700">
 
-  <!-- Stars + hearts layer -->
-  <div class="star-layer" aria-hidden="true"></div>
-  <div class="hearts-layer" aria-hidden="true"></div>
+    <!-- App Root -->
+    <div id="app" class="min-h-screen flex flex-col">
+        <!-- Content rendered by JS -->
+    </div>
 
-  <main class="app-shell">
-    <section class="card" aria-label="Sorry, Mitthu">
-      <div class="orbit">
-        <div class="halo"></div>
-        <div class="halo-inner"></div>
+    <script>
+        /* --- STATE MANAGEMENT --- */
+        const state = {
+            currentView: 'home', // home, write, profile, read
+            darkMode: false,
+            selectedPoem: null,
+            filter: 'Sabhi',
+            searchTerm: '',
+            poems: [
+                {
+                    id: 1,
+                    title: "Adhuri Dastaan / अधूरी दास्तां",
+                    author: "Himanshu Soni",
+                    content: "Kuch panne abhi bhi khali hain kitaab-e-zindagi ke,\nShayad tum aaoge to kahani puri hogi.\n\nRaaste wahi hain, bas manzil badal gayi hai,\nPehle tum thi, ab tumhari yaadein humsafar hain.\n\nकुछ पन्ने अभी भी खाली हैं किताब-ए-ज़िंदगी के,\nशायद तुम आओगे तो कहानी पूरी होगी।",
+                    tags: ["Ishq", "Yaadein", "Modern"],
+                    likes: 2450,
+                    date: "Nov 2025"
+                },
+                {
+                    id: 2,
+                    title: "Hazaron Khwahishen / हज़ारों ख्वाहिशें",
+                    author: "Mirza Ghalib",
+                    content: "Hazaron khwahishen aisi ke har khwahish pe dam nikle,\nBohat niklay mere armaan, lekin phir bhi kam nikle.\n\nMohabbat mein nahin hai farq jeene aur marne ka,\nUsi ko dekh kar jeete hain jis kaafir pe dam nikle.\n\nहज़ारों ख्वाहिशें ऐसी कि हर ख्वाहिश पे दम निकले,\nबहुत निकले मेरे अरमान, लेकिन फिर भी कम निकले।",
+                    tags: ["Classic", "Philosophy", "Ghalib"],
+                    likes: 8992,
+                    date: "1850"
+                },
+                {
+                    id: 3,
+                    title: "Koshish / कोशिश",
+                    author: "Harivansh Rai Bachchan",
+                    content: "Lehron se darkar nauka paar nahi hoti,\nKoshish karne walon ki kabhi haar nahi hoti.\n\nNanhi cheenti jab daana lekar chalti hai,\nChadhti deewaron par, sau baar fisalti hai.\n\nलहरों से डर कर नौका पार नहीं होती,\nकोशिश करने वालों की कभी हार नहीं होती।",
+                    tags: ["Prerna", "Sahitya", "Classic"],
+                    likes: 5100,
+                    date: "1960"
+                },
+                {
+                    id: 4,
+                    title: "Sukoon / सुकून",
+                    author: "Himanshu Soni",
+                    content: "Suna hai shor bohot hai shehar mein tumhare,\nKabhi fursat mile to gaon ki shaam dekhna.\n\nWahan deewarein kachchi hain magar dil pakke hain,\nKisi roz wahan ka neela aasmaan dekhna.",
+                    tags: ["Sukoon", "Gaon", "Zindagi"],
+                    likes: 3200,
+                    date: "2024"
+                }
+            ],
+            categories: ["Sabhi", "Ishq", "Dard", "Prerna", "Sufi", "Sahitya"],
+            aiAnalysis: null,
+            translation: null,
+            isAnalyzing: false,
+            isTranslating: false,
+            isGeneratingMuse: false,
+            isCompletingVerse: false,
+            writeForm: { title: '', content: '', tags: '' }
+        };
 
-        <div class="swing-heart-wrap">
-          <div class="swing-string"></div>
-          <div class="swing-heart">
-            <div class="swing-label">
-              <span>sorry<br>mitthu</span>
-            </div>
-          </div>
-        </div>
+        const apiKey = ""; // API Key provided at runtime
 
-        <div class="orbit-heart"></div>
-        <div class="orbit-heart"></div>
-        <div class="orbit-heart"></div>
-        <div class="orbit-heart"></div>
-      </div>
-
-      <div class="title">
-        <span class="shadow">SORRY MITTHU</span>
-      </div>
-
-      <div class="ribbon">
-        FOR&nbsp;YOU,&nbsp;ONLY&nbsp;YOU
-      </div>
-
-      <div class="floating-note">
-        <div class="note-heart"></div>
-        <span>one little heart saying&nbsp;&nbsp;“sorry”</span>
-      </div>
-
-      <!-- click / tap anywhere on the card -->
-      <button class="save-trigger" aria-label="Send soft floating hearts to Mitthu"></button>
-    </section>
-  </main>
-
-  <script>
-    (function () {
-      const starLayer = document.querySelector(".star-layer");
-      const heartsLayer = document.querySelector(".hearts-layer");
-      const trigger = document.querySelector(".save-trigger");
-
-      function createStars() {
-        const starCount = 70;
-        for (let i = 0; i < starCount; i++) {
-          const s = document.createElement("div");
-          s.className = "star";
-          const x = Math.random() * 100;
-          const y = Math.random() * 100;
-          s.style.left = x + "vw";
-          s.style.top = y + "vh";
-          const delay = Math.random() * 6;
-          const size = 1.6 + Math.random() * 1.8;
-          s.style.width = size + "px";
-          s.style.height = size + "px";
-          s.style.animationDelay = -delay + "s";
-          starLayer.appendChild(s);
+        /* --- API UTILITIES --- */
+        async function callGemini(prompt) {
+            try {
+                const response = await fetch(
+                    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
+                    }
+                );
+                if (!response.ok) throw new Error(`API Error: ${response.status}`);
+                const data = await response.json();
+                return data.candidates?.[0]?.content?.parts?.[0]?.text || "Maaf karein, sampark toot gaya.";
+            } catch (error) {
+                console.error("Gemini API Error:", error);
+                return "Sampark toot gaya hai. Kripya punah prayas karein.";
+            }
         }
-      }
 
-      function spawnHeartsBurst(x, y) {
-        const burstCount = 26 + Math.floor(Math.random() * 12);
-        for (let i = 0; i < burstCount; i++) {
-          const heart = document.createElement("div");
-          heart.classList.add("heart");
-          const variant = Math.random();
-          if (variant < 0.33) heart.classList.add("soft");
-          else if (variant < 0.66) heart.classList.add("pastel");
-          if (Math.random() < 0.6) heart.classList.add("glow");
+        /* --- RENDER FUNCTIONS --- */
+        const app = document.getElementById('app');
 
-          const startX = x + (Math.random() - 0.5) * 80;
-          const startY = y + (Math.random() - 0.2) * 40;
+        function render() {
+            // Apply Theme Class
+            if (state.darkMode) {
+                document.documentElement.classList.add('dark');
+                document.body.classList.add('bg-[#151210]', 'text-stone-200');
+                document.body.classList.remove('bg-[#fffdf5]', 'text-stone-800');
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.body.classList.remove('bg-[#151210]', 'text-stone-200');
+                document.body.classList.add('bg-[#fffdf5]', 'text-stone-800');
+            }
 
-          heart.style.left = startX + "px";
-          heart.style.top = startY + "px";
-
-          const dx = (Math.random() - 0.5) * 220;
-          heart.style.setProperty("--dx", dx + "px");
-
-          const scale = 0.6 + Math.random() * 0.9;
-          const duration = 1.4 + Math.random() * 0.7;
-          const delay = Math.random() * 0.12;
-
-          heart.style.transform =
-            "translate3d(0, 0, 0) scale(" + scale + ") rotate(45deg)";
-          heart.style.animationDuration = duration + "s";
-          heart.style.animationDelay = delay + "s";
-
-          heartsLayer.appendChild(heart);
-          heart.addEventListener("animationend", () => heart.remove(), {
-            once: true,
-          });
+            app.innerHTML = `
+                ${Header()}
+                <main class="flex-grow">
+                    ${MainContent()}
+                </main>
+                ${Footer()}
+            `;
+            lucide.createIcons();
         }
-      }
 
-      trigger.addEventListener("click", (e) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        spawnHeartsBurst(centerX, centerY);
-      });
+        /* --- COMPONENTS --- */
 
-      window.addEventListener("load", () => {
-        createStars();
-        const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2;
-        setTimeout(() => spawnHeartsBurst(centerX, centerY + 10), 600);
-      });
-    })();
-  </script>
+        function Header() {
+            const navClass = state.darkMode 
+                ? 'bg-[#1a1614] border-[#3d342b] text-amber-50' 
+                : 'bg-[#fffdf5] border-amber-200/60 text-stone-800';
+            
+            const activeBtnClass = state.darkMode ? 'bg-stone-800 text-amber-500' : 'bg-amber-100 text-rose-800';
+            const inactiveBtnClass = state.darkMode ? 'text-stone-400 hover:text-amber-200' : 'text-stone-600 hover:text-rose-900';
+
+            return `
+                <nav class="sticky top-0 z-50 border-b shadow-sm transition-colors duration-500 ${navClass}">
+                    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="flex justify-between items-center h-24">
+                            <!-- Logo -->
+                            <div onclick="setView('home')" class="flex items-center cursor-pointer space-x-4 group">
+                                <div class="relative p-3 rounded-full border-2 transition-transform duration-700 group-hover:rotate-12 ${state.darkMode ? 'bg-stone-800 border-amber-600 text-amber-500' : 'bg-amber-50 border-amber-700 text-amber-800'}">
+                                    <i data-lucide="feather" class="w-7 h-7"></i>
+                                    <div class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                                </div>
+                                <div class="flex flex-col">
+                                    <h1 class="font-heading text-4xl tracking-wide leading-none flex gap-2 items-baseline">
+                                        <span class="${state.darkMode ? 'text-amber-500' : 'text-amber-800'}">Mehfil</span>
+                                        <span class="text-2xl font-light opacity-50">|</span>
+                                        <span class="${state.darkMode ? 'text-rose-400' : 'text-rose-700'}">महफ़िल</span>
+                                    </h1>
+                                    <span class="text-[10px] font-bold uppercase tracking-[0.3em] mt-1 opacity-60">Designed by Himanshu</span>
+                                </div>
+                            </div>
+
+                            <!-- Desktop Nav -->
+                            <div class="hidden md:flex items-center space-x-8">
+                                <button onclick="setView('home')" class="flex items-center space-x-2 px-4 py-2 rounded-full font-medium text-lg transition-all duration-300 ${state.currentView === 'home' ? activeBtnClass : inactiveBtnClass}">
+                                    <i data-lucide="book-open" class="w-5 h-5"></i><span>Mehfil</span>
+                                </button>
+                                <button onclick="setView('write')" class="flex items-center space-x-2 px-4 py-2 rounded-full font-medium text-lg transition-all duration-300 ${state.currentView === 'write' ? activeBtnClass : inactiveBtnClass}">
+                                    <i data-lucide="pen-tool" class="w-5 h-5"></i><span>Likho</span>
+                                </button>
+                                <button onclick="setView('profile')" class="flex items-center space-x-2 px-4 py-2 rounded-full font-medium text-lg transition-all duration-300 ${state.currentView === 'profile' ? activeBtnClass : inactiveBtnClass}">
+                                    <i data-lucide="user" class="w-5 h-5"></i><span>Shayar</span>
+                                </button>
+                                <button onclick="toggleTheme()" class="p-3 rounded-full transition-colors border ${state.darkMode ? 'border-stone-700 hover:bg-stone-800 text-amber-400' : 'border-amber-200 hover:bg-amber-100 text-amber-800'}">
+                                    <i data-lucide="${state.darkMode ? 'sun' : 'moon'}" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            `;
+        }
+
+        function Footer() {
+            const footerClass = state.darkMode ? 'bg-[#151210] border-stone-900 text-stone-600' : 'bg-[#fffdf5] border-amber-100 text-stone-500';
+            return `
+                <footer class="py-12 text-center border-t mt-auto ${footerClass}">
+                    <div class="flex items-center justify-center space-x-3 mb-4 opacity-80">
+                        <i data-lucide="feather" class="w-5 h-5"></i>
+                        <span class="font-heading text-xl">Mehfil</span>
+                    </div>
+                    <p class="text-xs font-bold tracking-[0.2em] uppercase opacity-60">Designed with ❤️ by Himanshu</p>
+                </footer>
+            `;
+        }
+
+        function MainContent() {
+            if (state.currentView === 'home') return HomeView();
+            if (state.currentView === 'read') return ReadView();
+            if (state.currentView === 'write') return WriteView();
+            if (state.currentView === 'profile') return ProfileView();
+            return '';
+        }
+
+        /* --- VIEWS --- */
+
+        function HomeView() {
+            const filtered = state.poems.filter(p => {
+                const matchFilter = state.filter === 'Sabhi' || p.tags.includes(state.filter);
+                const matchSearch = p.title.toLowerCase().includes(state.searchTerm.toLowerCase()) || 
+                                    p.content.toLowerCase().includes(state.searchTerm.toLowerCase());
+                return matchFilter && matchSearch;
+            });
+
+            return `
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                    <!-- Hero -->
+                    <section class="rounded-[2.5rem] p-10 md:p-20 mb-16 relative overflow-hidden shadow-2xl ${state.darkMode ? 'bg-[#1e1b19]' : 'bg-[#2c2420]'}">
+                        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1516280440614-6697288d5d38?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
+                        <div class="relative z-10 max-w-4xl">
+                            <span class="inline-block py-2 px-5 rounded-full text-[10px] font-bold tracking-[0.25em] mb-8 border ${state.darkMode ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' : 'bg-amber-50/10 text-amber-200 border-amber-200/20'}">AAJ KA VICHAR</span>
+                            <h1 class="font-heading text-4xl md:text-6xl lg:text-7xl mb-10 leading-tight text-white drop-shadow-lg">"Woh ishq hi kya jo aasaan ho, <br/>Woh dard hi kya jo bezuban ho."</h1>
+                            <p class="text-xl md:text-2xl text-amber-100/80 mb-12 font-body italic font-light">— Himanshu Soni</p>
+                            <button onclick="openReader(0)" class="px-10 py-4 rounded-xl font-bold tracking-widest transition-all shadow-lg bg-amber-600 text-white hover:bg-amber-700 hover:scale-105">Padhein (Read)</button>
+                        </div>
+                    </section>
+
+                    <!-- Filters -->
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-14">
+                        <div class="flex items-center gap-3 overflow-x-auto pb-4 md:pb-0 no-scrollbar">
+                            <i data-lucide="filter" class="w-5 h-5 opacity-50"></i>
+                            ${state.categories.map(cat => `
+                                <button onclick="setFilter('${cat}')" class="px-6 py-2.5 rounded-full text-sm font-bold tracking-wide whitespace-nowrap transition-all border ${state.filter === cat ? (state.darkMode ? 'bg-amber-700 text-white border-amber-700' : 'bg-rose-800 text-white border-rose-800 shadow-md') : (state.darkMode ? 'bg-[#1e1b19] text-stone-400 border-stone-800 hover:border-stone-600' : 'bg-white text-stone-600 border-amber-100 hover:border-amber-300')}">${cat}</button>
+                            `).join('')}
+                        </div>
+                        <div class="relative w-full md:w-96">
+                            <i data-lucide="search" class="absolute left-5 top-1/2 transform -translate-y-1/2 w-5 h-5 opacity-50"></i>
+                            <input type="text" placeholder="Shayari dhoondein..." value="${state.searchTerm}" oninput="setSearch(this.value)" class="w-full pl-14 pr-6 py-3.5 rounded-full text-sm font-medium focus:outline-none focus:ring-2 transition-all shadow-sm ${state.darkMode ? 'bg-[#1e1b19] text-stone-200 placeholder-stone-600 focus:ring-amber-900/50 border border-stone-800' : 'bg-white text-stone-800 border border-amber-100 focus:ring-rose-200 focus:border-rose-300'}">
+                        </div>
+                    </div>
+
+                    <!-- Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        ${filtered.map(poem => PoemCard(poem)).join('')}
+                    </div>
+                    ${filtered.length === 0 ? `
+                        <div class="text-center py-32 opacity-50">
+                            <i data-lucide="scroll" class="mx-auto mb-6 w-16 h-16"></i>
+                            <p class="font-heading text-3xl">Khamoshi...</p>
+                            <p class="mt-3 text-lg">Koi shayari nahi mili.</p>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        function PoemCard(poem) {
+            return `
+                <div onclick="openReader(${poem.id})" class="group cursor-pointer relative overflow-hidden rounded-2xl p-8 transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl border ${state.darkMode ? 'bg-[#1e1b19] border-stone-800 hover:border-amber-700/50' : 'bg-white border-amber-100 hover:border-amber-300'}">
+                    <div class="mb-6 relative z-10">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-[0.15em] border ${state.darkMode ? 'bg-[#2a2522] border-stone-700 text-amber-500' : 'bg-amber-50 border-amber-200 text-rose-800'}">${poem.tags[0]}</span>
+                            <span class="text-xs opacity-60">${poem.date}</span>
+                        </div>
+                        <h3 class="font-heading text-2xl mb-3 leading-tight group-hover:text-amber-600 transition-colors">${poem.title}</h3>
+                        <div class="flex items-center gap-3 mb-4">
+                            <span class="w-8 h-[1px] ${state.darkMode ? 'bg-stone-700' : 'bg-amber-300'}"></span>
+                            <p class="text-sm font-bold uppercase tracking-widest opacity-70">${poem.author}</p>
+                        </div>
+                    </div>
+                    <div class="relative h-32 overflow-hidden mb-6 font-body text-lg leading-loose opacity-80">
+                        <p class="whitespace-pre-line">${poem.content}</p>
+                        <div class="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t ${state.darkMode ? 'from-[#1e1b19]' : 'from-white'} to-transparent"></div>
+                    </div>
+                    <div class="flex items-center justify-between pt-6 border-t border-dashed border-stone-300/20">
+                        <div class="flex space-x-6 text-sm font-medium opacity-70">
+                            <span class="flex items-center space-x-2 hover:text-rose-500"><i data-lucide="heart" class="w-4 h-4"></i> <span>${poem.likes}</span></span>
+                        </div>
+                        <span class="text-xs font-bold uppercase tracking-widest flex items-center gap-2 text-amber-600 group-hover:translate-x-1 transition-transform">
+                            <span>Padhein</span> <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function ReadView() {
+            const poem = state.selectedPoem;
+            if (!poem) return '';
+
+            return `
+                <div class="max-w-3xl mx-auto px-4 py-10">
+                    <button onclick="setView('home')" class="mb-10 flex items-center space-x-2 text-xs font-bold uppercase tracking-[0.2em] opacity-60 hover:opacity-100 transition-opacity">
+                        <i data-lucide="arrow-left" class="w-4 h-4"></i> <span>Wapas (Back)</span>
+                    </button>
+
+                    <article class="p-8 md:p-16 rounded-3xl shadow-2xl relative overflow-hidden border ${state.darkMode ? 'bg-[#1e1b19] border-stone-800' : 'bg-white border-amber-100'}">
+                        <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r ${state.darkMode ? 'from-stone-800 via-amber-700 to-stone-800' : 'from-amber-200 via-rose-400 to-amber-200'}"></div>
+                        
+                        <header class="text-center mb-14">
+                            <div class="flex justify-center gap-3 mb-8">
+                                ${poem.tags.map(tag => `<span class="text-[10px] font-bold uppercase tracking-widest px-4 py-1.5 border rounded-full opacity-70 border-current">${tag}</span>`).join('')}
+                            </div>
+                            <h1 class="font-heading text-4xl md:text-5xl mb-6 leading-snug ${state.darkMode ? 'text-amber-50' : 'text-stone-900'}">${poem.title}</h1>
+                            <div class="flex items-center justify-center space-x-4">
+                                <span class="h-px w-16 bg-current opacity-30"></span>
+                                <p class="text-lg font-medium ${state.darkMode ? 'text-amber-500' : 'text-rose-700'}">${poem.author}</p>
+                                <span class="h-px w-16 bg-current opacity-30"></span>
+                            </div>
+                        </header>
+
+                        <div class="relative mb-14 min-h-[180px]">
+                            ${state.isTranslating ? `
+                                <div class="flex flex-col items-center justify-center py-12 opacity-60">
+                                    <i data-lucide="loader-2" class="w-8 h-8 animate-spin mb-3 text-amber-500"></i>
+                                    <span class="text-sm">Anuvaad ho raha hai...</span>
+                                </div>
+                            ` : `
+                                <div class="font-body text-2xl md:text-3xl leading-loose whitespace-pre-line text-center ${state.translation ? 'italic text-amber-600' : ''}">
+                                    ${state.translation ? state.translation : poem.content}
+                                </div>
+                            `}
+                        </div>
+
+                        <!-- AI Tools -->
+                        <div class="flex flex-col md:flex-row justify-center gap-4 mb-12 p-2 rounded-2xl ${state.darkMode ? 'bg-[#25211e]' : 'bg-stone-50'}">
+                            <button onclick="handleTranslate()" class="flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${state.translation ? 'bg-amber-100 text-amber-800' : 'opacity-60 hover:opacity-100'}">
+                                <i data-lucide="languages" class="w-4 h-4"></i> ${state.translation ? 'Asli (Original)' : 'Tarjuma (Translate)'}
+                            </button>
+                            <div class="w-px bg-current opacity-10 hidden md:block"></div>
+                            <button onclick="handleAnalyze()" ${state.isAnalyzing || state.aiAnalysis ? 'disabled' : ''} class="flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${state.aiAnalysis ? 'bg-purple-100 text-purple-800' : 'opacity-60 hover:opacity-100'}">
+                                ${state.isAnalyzing ? '<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i>' : '<i data-lucide="sparkles" class="w-4 h-4"></i>'}
+                                Gehrai (Analysis)
+                            </button>
+                        </div>
+
+                        ${state.aiAnalysis ? `
+                            <div class="mb-12 p-8 rounded-2xl border border-dashed border-purple-300 bg-purple-50/10">
+                                <h3 class="font-bold text-xs uppercase tracking-[0.2em] mb-4 flex items-center gap-2 text-purple-500">
+                                    <i data-lucide="brain" class="w-4 h-4"></i> Insight
+                                </h3>
+                                <div class="text-lg font-body leading-relaxed opacity-90">"${state.aiAnalysis}"</div>
+                            </div>
+                        ` : ''}
+                    </article>
+                </div>
+            `;
+        }
+
+        function WriteView() {
+            return `
+                <div class="max-w-3xl mx-auto px-4 py-12">
+                    <div class="mb-12 text-center">
+                        <div class="inline-block p-3 rounded-full bg-amber-100 text-amber-600 mb-4 mx-auto"><i data-lucide="pen-tool" class="w-8 h-8"></i></div>
+                        <h2 class="font-heading text-4xl mb-3">Kalam Aur Kagaz</h2>
+                        <p class="text-lg opacity-60">Apne jazbaaton ko shabdon mein piroyein.</p>
+                    </div>
+
+                    <div class="p-8 md:p-12 rounded-3xl shadow-xl relative border ${state.darkMode ? 'bg-[#1e1b19] border-stone-700' : 'bg-white border-amber-200'}">
+                        <button onclick="handleMuse()" ${state.isGeneratingMuse ? 'disabled' : ''} class="absolute top-6 right-6 z-10 flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all shadow-sm bg-amber-50 text-amber-900 border border-amber-200">
+                            ${state.isGeneratingMuse ? '<i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i>' : '<i data-lucide="sparkles" class="w-3 h-3"></i>'}
+                            <span>${state.isGeneratingMuse ? 'Soch raha...' : 'Naya Khayal'}</span>
+                        </button>
+
+                        <div class="space-y-8 mt-6">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-[0.2em] mb-3 opacity-60">Unwaan (Title)</label>
+                                <input type="text" value="${state.writeForm.title}" oninput="state.writeForm.title = this.value" placeholder="Shayari ka naam..." class="w-full text-3xl font-heading bg-transparent border-b-2 focus:outline-none pb-2 border-current opacity-80 focus:opacity-100 focus:border-amber-500">
+                            </div>
+                            <div>
+                                <div class="flex justify-between items-center mb-4">
+                                    <label class="block text-xs font-bold uppercase tracking-[0.2em] opacity-60">Shayari</label>
+                                    <button onclick="handleCompleteVerse()" ${state.isCompletingVerse ? 'disabled' : ''} class="flex items-center gap-2 text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100">
+                                        ${state.isCompletingVerse ? '<i data-lucide="loader-2" class="w-3 h-3 animate-spin"></i>' : '<i data-lucide="wand-2" class="w-3 h-3"></i>'}
+                                        Sher Pura Karein
+                                    </button>
+                                </div>
+                                <div class="p-4 rounded-2xl border focus-within:ring-2 focus-within:ring-amber-500/20 ${state.darkMode ? 'bg-stone-900/50 border-stone-700' : 'bg-stone-50 border-stone-200'}">
+                                    <textarea id="writeContent" oninput="state.writeForm.content = this.value" placeholder="Yahan likhein..." rows="8" class="w-full text-xl font-body leading-loose bg-transparent resize-y focus:outline-none">${state.writeForm.content}</textarea>
+                                </div>
+                            </div>
+                            <div class="flex justify-end">
+                                <button onclick="handlePublish()" class="px-10 py-4 rounded-xl font-bold tracking-wider shadow-lg flex items-center gap-2 bg-amber-600 text-white hover:bg-amber-700">
+                                    <i data-lucide="feather" class="w-4 h-4"></i> Pesh Karein
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function ProfileView() {
+            const myPoems = state.poems.filter(p => p.author === "Himanshu Soni");
+            return `
+                <div class="max-w-5xl mx-auto px-4 py-12">
+                    <div class="p-10 md:p-16 rounded-[2rem] flex flex-col md:flex-row items-center gap-12 mb-16 shadow-xl border ${state.darkMode ? 'bg-[#1e1b19] border-stone-800' : 'bg-white border-amber-100'}">
+                        <div class="w-48 h-48 rounded-full p-2 bg-gradient-to-tr from-amber-400 to-rose-600 shadow-2xl">
+                            <div class="w-full h-full rounded-full flex items-center justify-center overflow-hidden bg-current text-stone-100">
+                                <i data-lucide="user" class="w-16 h-16"></i>
+                            </div>
+                        </div>
+                        <div class="text-center md:text-left flex-1">
+                            <h2 class="text-5xl font-heading mb-2">Himanshu Soni</h2>
+                            <p class="text-sm font-bold tracking-[0.2em] uppercase mb-6 text-rose-600">Mukhya Shayar</p>
+                            <p class="font-body text-xl italic opacity-70">"Shabdon ki duniya mein ek musafir. Dil ki baat, kalam ke saath."</p>
+                            <div class="flex justify-center md:justify-start gap-12 mt-10">
+                                <div class="text-center">
+                                    <span class="block text-3xl font-bold font-heading">${myPoems.length}</span>
+                                    <span class="text-[10px] uppercase tracking-[0.2em] opacity-60 font-bold">Rachnayein</span>
+                                </div>
+                                <div class="text-center">
+                                    <span class="block text-3xl font-bold font-heading">15.2K</span>
+                                    <span class="text-[10px] uppercase tracking-[0.2em] opacity-60 font-bold">Chahne Wale</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 mb-10">
+                        <i data-lucide="coffee" class="w-6 h-6 text-amber-600"></i>
+                        <h3 class="text-3xl font-heading">Meri Rachnayein</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        ${myPoems.map(poem => PoemCard(poem)).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        /* --- ACTIONS --- */
+
+        function setView(view) {
+            state.currentView = view;
+            // Reset temporary states
+            state.translation = null;
+            state.aiAnalysis = null;
+            state.showTranslation = false;
+            render();
+        }
+
+        function toggleTheme() {
+            state.darkMode = !state.darkMode;
+            render();
+        }
+
+        function setFilter(cat) {
+            state.filter = cat;
+            render();
+        }
+
+        function setSearch(val) {
+            state.searchTerm = val;
+            render();
+        }
+
+        function openReader(id) {
+            // If ID is 0 (from hero), pick first poem
+            const poemId = id === 0 ? state.poems[0].id : id;
+            state.selectedPoem = state.poems.find(p => p.id === poemId);
+            state.translation = null; 
+            state.aiAnalysis = null;
+            setView('read');
+        }
+
+        async function handleAnalyze() {
+            state.isAnalyzing = true;
+            render();
+            const prompt = `Analyze this Hindi/Urdu poetry. Explain the 'Jazbaat' (emotions), 'Matlab' (meaning). Keep it soulful and concise (under 100 words). Poem: ${state.selectedPoem.content}`;
+            const res = await callGemini(prompt);
+            state.aiAnalysis = res;
+            state.isAnalyzing = false;
+            render();
+        }
+
+        async function handleTranslate() {
+            // Toggle back to original if already translated
+            if (state.translation) {
+                state.translation = null;
+                render();
+                return;
+            }
+            state.isTranslating = true;
+            render();
+            const prompt = `Translate this Hindi poetry into simple, poetic English. Capture the essence. Poem: ${state.selectedPoem.content}`;
+            const res = await callGemini(prompt);
+            state.translation = res;
+            state.isTranslating = false;
+            render();
+        }
+
+        async function handleMuse() {
+            state.isGeneratingMuse = true;
+            render();
+            const prompt = `Generate a short, poetic first line for a Hindi Shayari in Devanagari or Roman script. Theme: Love, Pain, or Life. Just the line.`;
+            const res = await callGemini(prompt);
+            const currentContent = state.writeForm.content;
+            state.writeForm.content = currentContent ? `${currentContent}\n\n[Khayal: ${res}]` : `[Khayal: ${res}]\n\n`;
+            state.isGeneratingMuse = false;
+            render();
+        }
+
+        async function handleCompleteVerse() {
+            const content = state.writeForm.content;
+            if (!content) return;
+            state.isCompletingVerse = true;
+            render();
+            const lines = content.trim().split('\n').filter(line => line.trim() !== '');
+            const lastLine = lines[lines.length - 1];
+            const prompt = `I wrote this line of Hindi poetry: "${lastLine}". Write a rhyming second line (Misra) to complete the couplet. Return ONLY the second line.`;
+            const res = await callGemini(prompt);
+            state.writeForm.content = content + "\n" + res;
+            state.isCompletingVerse = false;
+            render();
+        }
+
+        function handlePublish() {
+            const { title, content } = state.writeForm;
+            if(!title || !content) return alert("Kripya Unwaan aur Shayari likhein.");
+            
+            const newPoem = {
+                id: state.poems.length + 1,
+                title: title,
+                author: "Himanshu Soni",
+                content: content,
+                tags: ["New", "Modern"],
+                likes: 0,
+                date: "Nov 2025"
+            };
+            
+            state.poems.unshift(newPoem);
+            state.writeForm = { title: '', content: '', tags: '' };
+            setView('home');
+        }
+
+        // Initial Render
+        render();
+
+    </script>
 </body>
 </html>
